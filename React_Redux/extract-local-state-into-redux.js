@@ -7,22 +7,19 @@ In the Presentational component, first, remove the messages property in the loca
 Once these changes are made, the app will continue to function the same, except Redux manages the state. This example also illustrates how a component may have local state: your component still tracks user input locally in its own state. You can see how Redux provides a useful state management framework on top of React. You achieved the same result using only React's local state at first, and this is usually possible with simple apps. However, as your apps become larger and more complex, so does your state management, and this is the problem Redux solves.*/
 
 // Redux:
-const ADD = 'ADD';
+const ADD = "ADD";
 
-const addMessage = (message) => {
+const addMessage = message => {
   return {
     type: ADD,
     message: message
-  }
+  };
 };
 
 const messageReducer = (state = [], action) => {
   switch (action.type) {
     case ADD:
-      return [
-        ...state,
-        action.message
-      ];
+      return [...state, action.message];
     default:
       return state;
   }
@@ -34,13 +31,12 @@ const store = Redux.createStore(messageReducer);
 const Provider = ReactRedux.Provider;
 const connect = ReactRedux.connect;
 
-// Change code below this line
 class Presentational extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: ''
-    }
+      input: ""
+    };
     this.handleChange = this.handleChange.bind(this);
     this.submitMessage = this.submitMessage.bind(this);
   }
@@ -51,7 +47,7 @@ class Presentational extends React.Component {
   }
   submitMessage() {
     this.setState({
-      input: ''
+      input: ""
     });
     this.props.submitNewMessage(this.state.input);
   }
@@ -59,142 +55,42 @@ class Presentational extends React.Component {
     return (
       <div>
         <h2>Type in a new Message:</h2>
-        <input
-          value={this.state.input}
-          onChange={this.handleChange}/><br/>
+        <input value={this.state.input} onChange={this.handleChange} />
+        <br />
         <button onClick={this.submitMessage}>Submit</button>
         <ul>
-          {this.props.messages.map( (message, idx) => {
-              return (
-                 <li key={idx}>{message}</li>
-              )
-            })
-          }
+          {this.props.messages.map((message, idx) => {
+            return <li key={idx}>{message}</li>;
+          })}
         </ul>
       </div>
     );
   }
-};
-// Change code above this line
+}
 
-const mapStateToProps = (state) => {
-  return {messages: state}
+const mapStateToProps = state => {
+  return { messages: state };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    submitNewMessage: (message) => {
-      dispatch(addMessage(message))
+    submitNewMessage: message => {
+      dispatch(addMessage(message));
     }
-  }
+  };
 };
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(Presentational);
+const Container = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Presentational);
 
 class AppWrapper extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <Container/>
+        <Container />
       </Provider>
     );
   }
-};
-
-// Before
-
-// Redux:
-const ADD = 'ADD';
-
-const addMessage = (message) => {
-  return {
-    type: ADD,
-    message: message
-  }
-};
-
-const messageReducer = (state = [], action) => {
-  switch (action.type) {
-    case ADD:
-      return [
-        ...state,
-        action.message
-      ];
-    default:
-      return state;
-  }
-};
-
-const store = Redux.createStore(messageReducer);
-
-// React:
-const Provider = ReactRedux.Provider;
-const connect = ReactRedux.connect;
-
-// Change code below this line
-class Presentational extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      input: '',
-      messages: []
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.submitMessage = this.submitMessage.bind(this);
-  }
-  handleChange(event) {
-    this.setState({
-      input: event.target.value
-    });
-  }
-  submitMessage() {
-    this.setState({
-      input: '',
-      messages: this.state.messages.concat(this.state.input)
-    });
-  }
-  render() {
-    return (
-      <div>
-        <h2>Type in a new Message:</h2>
-        <input
-          value={this.state.input}
-          onChange={this.handleChange}/><br/>
-        <button onClick={this.submitMessage}>Submit</button>
-        <ul>
-          {this.state.messages.map( (message, idx) => {
-              return (
-                 <li key={idx}>{message}</li>
-              )
-            })
-          }
-        </ul>
-      </div>
-    );
-  }
-};
-// Change code above this line
-
-const mapStateToProps = (state) => {
-  return {messages: state}
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    submitNewMessage: (message) => {
-      dispatch(addMessage(message))
-    }
-  }
-};
-
-const Container = connect(mapStateToProps, mapDispatchToProps)(Presentational);
-
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Container/>
-      </Provider>
-    );
-  }
-};
+}

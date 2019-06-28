@@ -11,40 +11,33 @@ The code editor now shows all your Redux and React code from the past several ch
 
 Note: React Redux is available as a global variable here, so you can access the Provider with dot notation. The code in the editor takes advantage of this and sets it to a constant Provider for you to use in the AppWrapper render method.*/
 // Redux Code:
-const ADD = 'ADD';
+const ADD = "ADD";
 
-const addMessage = (message) => {
+const addMessage = message => {
   return {
     type: ADD,
     message
-  }
+  };
 };
 
 const messageReducer = (state = [], action) => {
   switch (action.type) {
     case ADD:
-      return [
-        ...state,
-        action.message
-      ];
+      return [...state, action.message];
     default:
       return state;
   }
 };
 
-
-
 const store = Redux.createStore(messageReducer);
-
-// React Code:
 
 class DisplayMessages extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: '',
+      input: "",
       messages: []
-    }
+    };
     this.handleChange = this.handleChange.bind(this);
     this.submitMessage = this.submitMessage.bind(this);
   }
@@ -56,7 +49,7 @@ class DisplayMessages extends React.Component {
   submitMessage() {
     const currentMessage = this.state.input;
     this.setState({
-      input: '',
+      input: "",
       messages: this.state.messages.concat(currentMessage)
     });
   }
@@ -64,33 +57,27 @@ class DisplayMessages extends React.Component {
     return (
       <div>
         <h2>Type in a new Message:</h2>
-        <input
-          value={this.state.input}
-          onChange={this.handleChange}/><br/>
+        <input value={this.state.input} onChange={this.handleChange} />
+        <br />
         <button onClick={this.submitMessage}>Submit</button>
         <ul>
-          {this.state.messages.map( (message, idx) => {
-              return (
-                 <li key={idx}>{message}</li>
-              )
-            })
-          }
+          {this.state.messages.map((message, idx) => {
+            return <li key={idx}>{message}</li>;
+          })}
         </ul>
       </div>
     );
   }
-};
+}
 
 const Provider = ReactRedux.Provider;
 
 class AppWrapper extends React.Component {
-  // render the Provider here
   render() {
-    return(
-    <Provider store={store}>
-      <DisplayMessages />
-    </Provider>
-
-    )};
-  // change code above this line
-};
+    return (
+      <Provider store={store}>
+        <DisplayMessages />
+      </Provider>
+    );
+  }
+}
